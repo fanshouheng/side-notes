@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>右侧便签</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main id="app">
+      <button id="dockTab" class="dock-tab" type="button"></button>
+      <section class="panel">
+        <header class="toolbar">
+          <input id="titleInput" class="title-input" spellcheck="false" />
+          <button id="todoTab" class="tab active" type="button">Todo</button>
+          <span class="separator">|</span>
+          <button id="doneTab" class="tab" type="button">Done</button>
+          <input id="opacityInput" class="opacity-input" type="range" min="0.2" max="0.9" step="0.05" title="Opacity" />
+        </header>
+        <section id="todoView" class="view active">
+          <div id="todoList" class="list"></div>
+          <button id="addArea" class="add-area" type="button">点击空白处新建</button>
+        </section>
+        <section id="doneView" class="view">
+          <div id="doneList" class="list"></div>
+        </section>
+      </section>
+      <div class="resize-edge"></div>
+    </main>
+    <script src="./renderer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "side-notes",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --check src/main.js && node --check src/preload.js && node --check src/renderer.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Dockable side notes for desktop",
+  "devDependencies": {
+    "electron": "^42.4.1"
+  }
+}

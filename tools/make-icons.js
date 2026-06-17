@@ -1,0 +1,20 @@
+﻿const { nativeImage } = require('electron');
+const fs = require('fs');
+const path = require('path');
+
+const iconSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="256" height="256" rx="56" fill="#111827"/>
+  <rect x="62" y="56" width="120" height="144" rx="22" fill="#FFD84D"/>
+  <rect x="86" y="78" width="120" height="144" rx="22" fill="#7DD3FC" opacity="0.95"/>
+  <rect x="104" y="100" width="90" height="112" rx="16" fill="#F8FAFC"/>
+  <rect x="118" y="122" width="62" height="10" rx="5" fill="#CBD5E1"/>
+  <rect x="118" y="142" width="44" height="10" rx="5" fill="#CBD5E1"/>
+  <rect x="118" y="162" width="52" height="10" rx="5" fill="#CBD5E1"/>
+</svg>`;
+
+fs.mkdirSync('assets', { recursive: true });
+const image = nativeImage.createFromDataURL('data:image/svg+xml;base64,' + Buffer.from(iconSvg).toString('base64'));
+fs.writeFileSync(path.join('assets', 'icon.png'), image.toPNG());
+fs.writeFileSync(path.join('assets', 'tray.png'), image.toPNG());
+console.log('icons written');

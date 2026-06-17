@@ -4,13 +4,49 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "test": "node --check src/main.js && node --check src/preload.js && node --check src/renderer.js"
+    "test": "node --check src/main.js && node --check src/preload.js && node --check src/renderer.js",
+    "pack": "npm test && electron-builder --dir",
+    "dist": "npm test && electron-builder --win nsis"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "Dockable side notes for desktop",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fanshouheng/side-notes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fanshouheng/side-notes/issues"
+  },
+  "build": {
+    "appId": "com.fanshouheng.sidenotes",
+    "productName": "Side Notes",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/icon.png",
+      "assets/tray.png",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon.png",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
   "devDependencies": {
-    "electron": "^42.4.1"
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3"
   }
 }

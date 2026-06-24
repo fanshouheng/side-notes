@@ -23,6 +23,7 @@
     "appId": "com.fanshouheng.sidenotes",
     "productName": "Side Notes",
     "electronDist": "node_modules/electron/dist",
+    "disableAsarIntegrity": true,
     "directories": {
       "output": "dist"
     },

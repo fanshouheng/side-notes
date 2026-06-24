@@ -8,7 +8,7 @@ const NOTE_COUNT = 3;
 const WINDOW_WIDTH = 320;
 const DEFAULT_HEIGHT = 150;
 const DEFAULT_BACKGROUND_OPACITY = 0.6;
-const COLLAPSED_WIDTH = 42;
+const COLLAPSED_WIDTH = 24;
 const GAP = 10;
 const TOP = 30;
 const MIN_HEIGHT = 72;
@@ -99,7 +99,7 @@ function positionWindows() {
       note.window.setBounds({
         x,
         y,
-        width: WINDOW_WIDTH,
+        width: visibleWidth,
         height: Math.max(note.height, MIN_HEIGHT),
       });
     }
@@ -113,7 +113,7 @@ function createNoteWindow(note) {
   const win = new BrowserWindow({
     width: WINDOW_WIDTH,
     height: Math.max(note.height, MIN_HEIGHT),
-    minWidth: WINDOW_WIDTH,
+    minWidth: COLLAPSED_WIDTH,
     minHeight: MIN_HEIGHT,
     frame: false,
     transparent: true,

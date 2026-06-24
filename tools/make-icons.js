@@ -1,20 +1,32 @@
-﻿const { nativeImage } = require('electron');
-const fs = require('fs');
-const path = require('path');
+const { app, nativeImage } = require("electron");
+const fs = require("fs");
+const path = require("path");
 
 const iconSvg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <rect width="256" height="256" rx="56" fill="#111827"/>
-  <rect x="62" y="56" width="120" height="144" rx="22" fill="#FFD84D"/>
-  <rect x="86" y="78" width="120" height="144" rx="22" fill="#7DD3FC" opacity="0.95"/>
-  <rect x="104" y="100" width="90" height="112" rx="16" fill="#F8FAFC"/>
-  <rect x="118" y="122" width="62" height="10" rx="5" fill="#CBD5E1"/>
-  <rect x="118" y="142" width="44" height="10" rx="5" fill="#CBD5E1"/>
-  <rect x="118" y="162" width="52" height="10" rx="5" fill="#CBD5E1"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="58" y="52" width="132" height="148" rx="12" stroke-width="14"/>
+    <path d="M86 92h76" stroke-width="12"/>
+    <path d="M86 124h76" stroke-width="12"/>
+    <path d="M86 156h50" stroke-width="12"/>
+    <path d="M156 180l42-42 20 20-42 42-28 8 8-28z" stroke-width="12"/>
+    <path d="M192 144l20 20" stroke-width="10"/>
+  </g>
 </svg>`;
 
-fs.mkdirSync('assets', { recursive: true });
-const image = nativeImage.createFromDataURL('data:image/svg+xml;base64,' + Buffer.from(iconSvg).toString('base64'));
-fs.writeFileSync(path.join('assets', 'icon.png'), image.toPNG());
-fs.writeFileSync(path.join('assets', 'tray.png'), image.toPNG());
-console.log('icons written');
+app.whenReady().then(() => {
+  fs.mkdirSync("assets", { recursive: true });
+  const image = nativeImage.createFromDataURL(
+    `data:image/svg+xml;base64,${Buffer.from(iconSvg).toString("base64")}`
+  );
+  const png = image.toPNG();
+
+  if (!png.length) {
+    throw new Error("Failed to render icon SVG");
+  }
+
+  fs.writeFileSync(path.join("assets", "icon.png"), png);
+  fs.writeFileSync(path.join("assets", "tray.png"), png);
+  console.log("icons written");
+  app.quit();
+});

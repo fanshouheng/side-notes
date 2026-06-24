@@ -8,6 +8,7 @@ let editingId = null;
 let activeView = "todo";
 
 const dockTab = document.getElementById("dockTab");
+const app = document.getElementById("app");
 const titleInput = document.getElementById("titleInput");
 const opacityInput = document.getElementById("opacityInput");
 const todoTab = document.getElementById("todoTab");
@@ -30,7 +31,8 @@ function save() {
 function render() {
   titleInput.value = note.title;
   opacityInput.value = note.backgroundOpacity;
-  document.documentElement.style.setProperty("--note-bg-opacity", note.backgroundOpacity);
+  app.style.setProperty("--note-bg-opacity", note.backgroundOpacity);
+  app.classList.toggle("collapsed", note.collapsed);
   dockTab.textContent = note.title;
   todoTab.classList.toggle("active", activeView === "todo");
   doneTab.classList.toggle("active", activeView === "done");
@@ -155,7 +157,10 @@ function removeDone(id) {
   render();
 }
 
-dockTab.addEventListener("click", () => window.sideNotes.toggle());
+dockTab.addEventListener("click", async () => {
+  note = await window.sideNotes.toggle();
+  render();
+});
 addArea.addEventListener("click", addTodo);
 todoTab.addEventListener("click", () => {
   activeView = "todo";
@@ -176,7 +181,7 @@ titleInput.addEventListener("keydown", (event) => {
 
 opacityInput.addEventListener("input", () => {
   note.backgroundOpacity = Number(opacityInput.value);
-  document.documentElement.style.setProperty("--note-bg-opacity", note.backgroundOpacity);
+  app.style.setProperty("--note-bg-opacity", note.backgroundOpacity);
   save();
 });
 

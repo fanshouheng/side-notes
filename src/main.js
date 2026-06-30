@@ -19,6 +19,7 @@ const GITHUB_ISSUE_URL = `${GITHUB_URL}/issues/new`;
 
 let tray = null;
 let notes = [];
+let settings = { desktopMode: false };
 let storePath = "";
 let isPositioning = false;
 
@@ -66,13 +67,16 @@ function loadStore() {
   }
 
   const groups = Array.isArray(stored.groups) ? stored.groups : [];
+  settings = {
+    desktopMode: Boolean(stored.settings && stored.settings.desktopMode),
+  };
   notes = Array.from({ length: NOTE_COUNT }, (_, index) => sanitizeNote(groups[index] || {}, index));
 }
 
 function saveStore() {
   const groups = notes.map(({ window, ...note }) => note);
   fs.mkdirSync(path.dirname(storePath), { recursive: true });
-  fs.writeFileSync(storePath, JSON.stringify({ groups }, null, 2), "utf8");
+  fs.writeFileSync(storePath, JSON.stringify({ settings, groups }, null, 2), "utf8");
 }
 
 function publicNote(note) {
@@ -109,6 +113,13 @@ function positionWindows() {
   isPositioning = false;
 }
 
+function applyDesktopMode() {
+  for (const note of notes) {
+    if (!note.window || note.window.isDestroyed()) continue;
+    note.window.setAlwaysOnTop(!settings.desktopMode);
+  }
+}
+
 function createNoteWindow(note) {
   const win = new BrowserWindow({
     width: WINDOW_WIDTH,
@@ -118,7 +129,7 @@ function createNoteWindow(note) {
     frame: false,
     transparent: true,
     resizable: true,
-    alwaysOnTop: true,
+    alwaysOnTop: !settings.desktopMode,
     skipTaskbar: true,
     title: note.title,
     icon: ICON_PATH,
@@ -167,6 +178,14 @@ function setAllCollapsed(collapsed) {
   positionWindows();
 }
 
+function setDesktopMode(desktopMode) {
+  settings.desktopMode = desktopMode;
+  applyDesktopMode();
+  if (desktopMode) setAllVisible(true);
+  saveStore();
+  updateTrayMenu();
+}
+
 function openExternalUrl(url) {
   shell.openExternal(url).catch((error) => console.error(`Failed to open ${url}`, error));
 }
@@ -181,6 +200,12 @@ function updateTrayMenu() {
       { label: "隐藏全部便签", click: () => setAllVisible(false) },
       { label: "全部展开", click: () => setAllCollapsed(false) },
       { label: "全部缩进", click: () => setAllCollapsed(true) },
+      {
+        label: "只显示在桌面",
+        type: "checkbox",
+        checked: settings.desktopMode,
+        click: (menuItem) => setDesktopMode(menuItem.checked),
+      },
       { type: "separator" },
       { label: "关于", click: () => openExternalUrl(GITHUB_URL) },
       { label: "问题反馈", click: () => openExternalUrl(GITHUB_ISSUE_URL) },

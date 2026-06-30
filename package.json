@@ -30,11 +30,12 @@
     "files": [
       "src/**/*",
       "assets/icon.png",
+      "assets/icon.ico",
       "assets/tray.png",
       "package.json"
     ],
     "win": {
-      "icon": "assets/icon.png",
+      "icon": "assets/icon.ico",
       "target": [
         "nsis"
       ]
